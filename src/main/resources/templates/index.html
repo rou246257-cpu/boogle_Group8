@@ -1,0 +1,146 @@
+
+<!DOCTYPE html>
+<html lang="zh-TW"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Boogle Search</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 70px 20px;
+        }
+
+        h1 {
+            font-size: 48px;
+            color: #4285f4;
+            text-align: center;
+        }
+
+        form {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin: 30px auto;
+        }
+
+        input {
+            width: 350px;
+            max-width: 65%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 20px;
+            font-size: 15px;
+        }
+
+        button {
+            padding: 12px 24px;
+            background-color: #4285f4;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #3367d6;
+        }
+
+        .results {
+            max-width: 650px;
+            margin: 35px auto;
+        }
+
+        .result {
+            background: white;
+            padding: 18px;
+            margin-bottom: 12px;
+            border-radius: 10px;
+            overflow-wrap: anywhere;
+        }
+
+        .result a {
+            color: #1a0dab;
+            font-size: 18px;
+        }
+
+        .result p {
+            color: #555;
+            font-size: 14px;
+        }
+
+        .error {
+            max-width: 650px;
+            margin: 20px auto;
+            color: #d93025;
+            text-align: center;
+        }
+
+        .empty {
+            color: #666;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Boogle</h1>
+
+    <form action="/search" method="get">
+
+        <input type="text"
+               name="query"
+               th:value="${query}"
+               placeholder="輸入獎學金搜尋關鍵字"
+               required>
+
+        <button type="submit">搜尋</button>
+
+    </form>
+
+    <!-- API 連線錯誤提示 -->
+    <p class="error"
+       th:if="${error != null}"
+       th:text="${error}">
+    </p>
+
+    <!-- 搜尋結果 -->
+    <div class="results"
+         th:if="${results != null}">
+
+        <h2>搜尋結果</h2>
+
+        <!-- 沒有結果 -->
+        <p class="empty"
+           th:if="${results.isEmpty()}">
+            沒有找到符合條件的搜尋結果。
+        </p>
+
+        <!-- 顯示每筆搜尋結果 -->
+        <div class="result"
+             th:each="item : ${results}">
+
+            <a th:href="${item.value}"
+               th:text="${item.key}"
+               target="_blank"
+               rel="noopener noreferrer">
+                搜尋結果標題
+            </a>
+
+            <p th:text="${item.value}">
+                搜尋結果網址
+            </p>
+
+        </div>
+
+    </div>
+
+</body>
+</html>
